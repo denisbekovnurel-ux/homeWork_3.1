@@ -123,124 +123,180 @@
 
 // prom1D
 //   .then((resolve1) => {
-//     console.log("Кейс 4 — Первый:", resolve1);
-//     return prom2D;
+// //     console.log("Кейс 4 — Первый:", resolve1);
+// //     return prom2D;
+// //   })
+// //   .then((resolve2) => {
+// //     console.log("Кейс 4 — второй:", resolve2);
+// //   })
+// //   .catch((error) => {
+// //     console.log("Кейс 4 — ошибка:", error);
+// //   });
+
+// function delay(value, ms, shouldFail = false) {
+//   return new Promise((resolve, reject) => {
+//     setTimeout(() => {
+//       shouldFail
+//         ? reject(new Error(`Ошибка при обработке: ${value}`))
+//         : resolve(value);
+//     }, ms);
+//   });
+// }
+
+// delay(1, 500)
+//   .then((resolve1) => {
+//     console.log("Первый:", resolve1);
+//     return delay(2, 500, true);
 //   })
 //   .then((resolve2) => {
-//     console.log("Кейс 4 — второй:", resolve2);
+//     console.log("Второй:", resolve2);
+//     return delay(3, 500);
+//   })
+//   .then((resolve3) => {
+//     console.log("Третий:", resolve3);
 //   })
 //   .catch((error) => {
-//     console.log("Кейс 4 — ошибка:", error);
+//     console.log(error);
+//   })
+//   .finally(() => {
+//     console.log("Finally сработал");
 //   });
 
-function delay(value, ms, shouldFail = false) {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      shouldFail
-        ? reject(new Error(`Ошибка при обработке: ${value}`))
-        : resolve(value);
-    }, ms);
-  });
-}
+// async function processDelays() {
+//   try {
+//     const r1 = await delay(1, 500);
+//     console.log("Первый:", r1);
+//     const r2 = await delay(2, 500, true);
+//     console.log("Второй:", r2);
+//     const r3 = await delay(3, 500);
+//     console.log("Третий:", r3);
+//   } catch (error) {
+//     console.log("Ошибка:", error);
+//   } finally {
+//     console.log("Finally сработал");
+//   }
 
-delay(1, 500)
-  .then((resolve1) => {
-    console.log("Первый:", resolve1);
-    return delay(2, 500, true);
+//   const values = [1, 2, 3, 4];
+//   const results = [];
+
+//   for (const value of values) {
+//     try {
+//       const shouldFail = Math.random() > 0.7;
+//       const res = await delay(value, 300, shouldFail);
+//       results.push({ value: res, error: null });
+//     } catch (error) {
+//       results.push({ value: value, error: error });
+//     }
+//   }
+
+//   console.log(results);
+// }
+
+// processDelays();
+
+// async function runAll() {
+//   try {
+//     const results = await Promise.all([
+//       delay(1, 300),
+//       delay(2, 400, true),
+//       delay(3, 500),
+//       delay(4, 600),
+//     ]);
+//     console.log("Все успешно:", results);
+//   } catch (error) {
+//     console.log("Promise.all упал:", error);
+//   }
+// }
+
+// runAll();
+
+// async function runAllSettled() {
+//   const results = await Promise.allSettled([
+//     delay(1, 300),
+//     delay(2, 400, true),
+//     delay(3, 500),
+//     delay(4, 600),
+//   ]);
+
+//   const succeeded = results
+//     .filter((r) => r.status === "fulfilled")
+//     .map((r) => r.value);
+//   const failed = results
+//     .filter((r) => r.status === "rejected")
+//     .map((r) => r.reason);
+
+//   console.log("Succeeded:", succeeded);
+//   console.log("Failed:", failed);
+// }
+
+// runAllSettled();
+
+// async function runRace() {
+//   try {
+//     const result = await Promise.race([
+//       delay("полезные данные", 2000),
+//       delay(null, 500, true),
+//     ]);
+//     console.log("Race успех:", result);
+//   } catch (error) {
+//     console.log("Race — сработал таймаут:", error);
+//   }
+// }
+
+// runRace();
+
+const charactersList = document.querySelector('.characters-list');
+
+fetch('../data/characters.json')
+  .then((response) => {
+    if (!response.ok) {
+      throw new Error(`Ошибка загрузки: ${response.status}`);
+    }
+    return response.json();
   })
-  .then((resolve2) => {
-    console.log("Второй:", resolve2);
-    return delay(3, 500);
-  })
-  .then((resolve3) => {
-    console.log("Третий:", resolve3);
+  .then((characters) => {
+    renderCharacters(characters);
   })
   .catch((error) => {
-    console.log(error);
-  })
-  .finally(() => {
-    console.log("Finally сработал");
+    console.log('Не удалось загрузить персонажей:', error);
   });
 
-async function processDelays() {
+function renderCharacters(characters) {
+  charactersList.innerHTML = '';
+
+  characters.forEach((character) => {
+    const card = document.createElement('div');
+    card.classList.add('character-card');
+
+    card.innerHTML = `
+      <div class="character-photo">
+        <img src="${character.person_photo}" alt="${character.name}">
+      </div>
+      <h4>${character.name}</h4>
+      <p>${character.age}</p>
+    `;
+
+    card.addEventListener('click', () => {
+      alert(`${character.name}, возраст: ${character.age}`);
+    });
+
+    charactersList.appendChild(card);
+  });
+}
+
+async function loadBio() {
   try {
-    const r1 = await delay(1, 500);
-    console.log("Первый:", r1);
-    const r2 = await delay(2, 500, true);
-    console.log("Второй:", r2);
-    const r3 = await delay(3, 500);
-    console.log("Третий:", r3);
-  } catch (error) {
-    console.log("Ошибка:", error);
-  } finally {
-    console.log("Finally сработал");
-  }
+    const response = await fetch('../data/bio.json');
 
-  const values = [1, 2, 3, 4];
-  const results = [];
-
-  for (const value of values) {
-    try {
-      const shouldFail = Math.random() > 0.7;
-      const res = await delay(value, 300, shouldFail);
-      results.push({ value: res, error: null });
-    } catch (error) {
-      results.push({ value: value, error: error });
+    if (!response.ok) {
+      throw new Error(`Ошибка загрузки: ${response.status}`);
     }
-  }
 
-  console.log(results);
-}
-
-processDelays();
-
-async function runAll() {
-  try {
-    const results = await Promise.all([
-      delay(1, 300),
-      delay(2, 400, true),
-      delay(3, 500),
-      delay(4, 600),
-    ]);
-    console.log("Все успешно:", results);
+    const bio = await response.json();
+    console.log(bio);
   } catch (error) {
-    console.log("Promise.all упал:", error);
+    console.log('Не удалось загрузить bio.json:', error);
   }
 }
 
-runAll();
-
-async function runAllSettled() {
-  const results = await Promise.allSettled([
-    delay(1, 300),
-    delay(2, 400, true),
-    delay(3, 500),
-    delay(4, 600),
-  ]);
-
-  const succeeded = results
-    .filter((r) => r.status === "fulfilled")
-    .map((r) => r.value);
-  const failed = results
-    .filter((r) => r.status === "rejected")
-    .map((r) => r.reason);
-
-  console.log("Succeeded:", succeeded);
-  console.log("Failed:", failed);
-}
-
-runAllSettled();
-
-async function runRace() {
-  try {
-    const result = await Promise.race([
-      delay("полезные данные", 2000),
-      delay(null, 500, true),
-    ]);
-    console.log("Race успех:", result);
-  } catch (error) {
-    console.log("Race — сработал таймаут:", error);
-  }
-}
-
-runRace();
+loadBio();

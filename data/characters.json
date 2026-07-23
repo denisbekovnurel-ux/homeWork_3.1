@@ -1,17 +1,17 @@
 [
   {
-    "name": "",
-    "age": 0,
-    "photo": "url"
+    "name": "Гэндальф",
+    "age": 2019,
+    "person_photo": "https://i.pravatar.cc/300?img=12"
   },
   {
-    "name": "",
-    "age": 0,
-    "photo": "url"
+    "name": "Арагорн",
+    "age": 87,
+    "person_photo": "https://i.pravatar.cc/300?img=13"
   },
   {
-    "name": "",
-    "age": 0,
-    "photo": "url"
+    "name": "Леголас",
+    "age": 2931,
+    "person_photo": "https://i.pravatar.cc/300?img=14"
   }
 ]
