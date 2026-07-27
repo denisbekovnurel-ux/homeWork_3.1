@@ -35,6 +35,60 @@
         </div>
       </div>
 
+      <div class="container">
+        <form id="regForm" novalidate>
+          <label>
+            Имя
+            <input type="text" name="name" required minlength="2" />
+          </label>
+
+          <label>
+            Email
+            <input type="email" name="email" required />
+          </label>
+
+          <label>
+            Пароль
+            <input type="password" name="password" required minlength="6" />
+          </label>
+
+          <label>
+            Возраст
+            <input type="number" name="age" required min="1" max="120" />
+          </label>
+
+          <label>
+            О себе
+            <textarea name="bio" rows="3"></textarea>
+          </label>
+
+          <label>
+            Пол
+            <select name="gender">
+              <option value="male">Мужской</option>
+              <option value="female">Женский</option>
+              <option value="other">Другое</option>
+            </select>
+          </label>
+
+          <label class="checkbox-row">
+            <input type="checkbox" name="consent" id="consent" />
+            Согласен на обработку данных
+          </label>
+
+          <div class="buttons">
+            <button type="button" id="sendJson" disabled>
+              Отправить (JSON)
+            </button>
+            <button type="button" id="sendFormData" disabled>
+              Отправить (FormData)
+            </button>
+          </div>
+        </form>
+
+        <div id="result"></div>
+      </div>
+
       <div class="gmail_block">
         <div class="container">
           <h3>Homework 1 (part 1)</h3>

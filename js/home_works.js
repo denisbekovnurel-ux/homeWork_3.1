@@ -245,9 +245,9 @@
 
 // runRace();
 
-const charactersList = document.querySelector('.characters-list');
+const charactersList = document.querySelector(".characters-list");
 
-fetch('../data/characters.json')
+fetch("../data/characters.json")
   .then((response) => {
     if (!response.ok) {
       throw new Error(`Ошибка загрузки: ${response.status}`);
@@ -258,15 +258,15 @@ fetch('../data/characters.json')
     renderCharacters(characters);
   })
   .catch((error) => {
-    console.log('Не удалось загрузить персонажей:', error);
+    console.log("Не удалось загрузить персонажей:", error);
   });
 
 function renderCharacters(characters) {
-  charactersList.innerHTML = '';
+  charactersList.innerHTML = "";
 
   characters.forEach((character) => {
-    const card = document.createElement('div');
-    card.classList.add('character-card');
+    const card = document.createElement("div");
+    card.classList.add("character-card");
 
     card.innerHTML = `
       <div class="character-photo">
@@ -276,7 +276,7 @@ function renderCharacters(characters) {
       <p>${character.age}</p>
     `;
 
-    card.addEventListener('click', () => {
+    card.addEventListener("click", () => {
       alert(`${character.name}, возраст: ${character.age}`);
     });
 
@@ -286,7 +286,7 @@ function renderCharacters(characters) {
 
 async function loadBio() {
   try {
-    const response = await fetch('../data/bio.json');
+    const response = await fetch("../data/bio.json");
 
     if (!response.ok) {
       throw new Error(`Ошибка загрузки: ${response.status}`);
@@ -295,8 +295,106 @@ async function loadBio() {
     const bio = await response.json();
     console.log(bio);
   } catch (error) {
-    console.log('Не удалось загрузить bio.json:', error);
+    console.log("Не удалось загрузить bio.json:", error);
   }
 }
 
 loadBio();
+
+const regForm = document.getElementById("regForm");
+const consent = document.getElementById("consent");
+const btnJson = document.getElementById("sendJson");
+const btnFormData = document.getElementById("sendFormData");
+const result = document.getElementById("result");
+
+consent.addEventListener("change", () => {
+  const isChecked = consent.checked;
+  btnJson.disabled = !isChecked;
+  btnFormData.disabled = !isChecked;
+});
+
+const validateForm = () => {
+  const name = regForm.name.value.trim();
+  const email = regForm.email.value.trim();
+  const password = regForm.password.value;
+  const age = regForm.age.value;
+
+  if (name.length < 2) return "Имя должно быть от 2 символов";
+  if (!email.includes("@")) return "Некорректный email";
+  if (password.length < 6) return "Пароль должен быть от 6 символов";
+  if (!age || age <= 0 || age > 120) return "Некорректный возраст";
+
+  return null;
+};
+
+const showResult = (text, isError = false) => {
+  result.textContent = text;
+  result.className = isError ? "error" : "";
+};
+
+const sendAsJson = async () => {
+  if (!consent.checked) return;
+
+  const validationError = validateForm();
+  if (validationError) {
+    showResult(validationError, true);
+    return;
+  }
+
+  const payload = {
+    name: regForm.name.value.trim(),
+    email: regForm.email.value.trim(),
+    password: regForm.password.value,
+    age: Number(regForm.age.value),
+    bio: regForm.bio.value.trim(),
+    gender: regForm.gender.value,
+  };
+
+  try {
+    const response = await fetch("https://jsonplaceholder.typicode.com/posts", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Сервер вернул ошибку: ${response.status}`);
+    }
+
+    const data = await response.json();
+    showResult("JSON отправлен успешно:\n" + JSON.stringify(data, null, 2));
+  } catch (error) {
+    showResult("Ошибка при отправке JSON: " + error.message, true);
+  }
+};
+
+const sendAsFormData = async () => {
+  if (!consent.checked) return;
+
+  const validationError = validateForm();
+  if (validationError) {
+    showResult(validationError, true);
+    return;
+  }
+
+  const formData = new FormData(regForm);
+
+  try {
+    const response = await fetch("https://jsonplaceholder.typicode.com/posts", {
+      method: "POST",
+      body: formData,
+    });
+
+    if (!response.ok) {
+      throw new Error(`Сервер вернул ошибку: ${response.status}`);
+    }
+
+    const data = await response.json();
+    showResult("FormData отправлен успешно:\n" + JSON.stringify(data, null, 2));
+  } catch (error) {
+    showResult("Ошибка при отправке FormData: " + error.message, true);
+  }
+};
+
+btnJson.addEventListener("click", sendAsJson);
+btnFormData.addEventListener("click", sendAsFormData);

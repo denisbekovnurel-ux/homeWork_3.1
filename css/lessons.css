@@ -1,5 +1,3 @@
-/* PHONE CHECKER */
-
 .phone_block {
   background: black;
   padding: 100px 0;
@@ -25,8 +23,6 @@
   width: 100%;
   margin: 20px 0;
 }
-
-/* TAB SLIDER */
 
 .tab_slider {
   background: black;
@@ -90,8 +86,6 @@
   margin-top: 50px;
 }
 
-/*------CARD SWITCHER------*/
-
 .card_switcher {
   background-color: black;
   padding: 100px 0;
@@ -126,8 +120,6 @@
   justify-content: space-between;
 }
 
-/*-------CONVERTER--------*/
-
 .converter {
   padding: 100px 0;
   background-color: black;
@@ -146,8 +138,6 @@
   display: flex;
   flex-direction: column;
 }
-
-/*------WEATHER------*/
 
 .weather {
   padding: 100px 0;
@@ -172,4 +162,70 @@
 
 hr {
   width: 100%;
+}
+.forumRegex {
+  max-width: 480px;
+  margin: 40px auto;
+  padding: 20px;
+  background: #1e1e1e;
+  color: #eee;
+  border-radius: 10px;
+}
+.forumRegex form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.forumRegex label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 14px;
+}
+.forumRegex input,
+.forumRegex textarea,
+.forumRegex select {
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #444;
+  background: #2b2b2b;
+  color: #eee;
+}
+.forumRegex .checkbox-row {
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+}
+.forumRegex .buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+.forumRegex button {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  background: #3b82f6;
+  color: #fff;
+}
+.forumRegex button:disabled {
+  background: #555;
+  cursor: not-allowed;
+}
+.forumRegex #result {
+  margin-top: 16px;
+  white-space: pre-wrap;
+  font-size: 13px;
+  background: #111;
+  padding: 10px;
+  border-radius: 6px;
+  min-height: 20px;
+}
+.forumRegex .error {
+  color: #ff6b6b;
+}
+
+.wrapper {
+  background: black;
 }
