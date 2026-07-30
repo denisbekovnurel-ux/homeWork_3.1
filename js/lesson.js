@@ -133,3 +133,62 @@ const sendAsFormData = async () => {
 
 btnJson.addEventListener("click", sendAsJson);
 btnFormData.addEventListener("click", sendAsFormData);
+
+const btnPrev = document.querySelector("#btn-prev");
+const btnNext = document.querySelector("#btn-next");
+const card = document.querySelector(".card");
+
+const BASE_URL = "https://jsonplaceholder.typicode.com/todos/";
+
+let currentId = 1;
+
+const fetchTodo = async (id) => {
+  try {
+    const response = await fetch(BASE_URL + id);
+
+    if (!response.ok) {
+      throw new Error("Ошибка");
+    }
+
+    const data = await response.json();
+
+    const { id: todoId, title, completed } = data;
+
+    card.style.borderColor = completed ? "green" : "red";
+
+    card.innerHTML = `
+      <p><strong>ID:</strong> ${todoId}</p>
+      <p><strong>Title:</strong> ${title}</p>
+      <p style="color:${completed ? "green" : "red"}">
+        ${completed ? "Completed" : "Not completed"}
+      </p>
+    `;
+  } catch (error) {
+    card.style.borderColor = "red";
+    card.innerHTML = `
+      <p style="color:red">${error.message}</p>
+    `;
+  }
+};
+
+fetchTodo(currentId);
+
+btnNext.addEventListener("click", () => {
+  currentId++;
+
+  if (currentId > 200) {
+    currentId = 1;
+  }
+
+  fetchTodo(currentId);
+});
+
+btnPrev.addEventListener("click", () => {
+  currentId--;
+
+  if (currentId < 1) {
+    currentId = 200;
+  }
+
+  fetchTodo(currentId);
+});
